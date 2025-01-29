@@ -3,121 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chintu Dairy Farm</title>
+    <title>Chintu Dairy Farm Management</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #f4f4f4;
-        }
-
-        header {
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            padding: 1rem;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .tab-btn {
-            padding: 0.5rem 1rem;
-            background: #ddd;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .tab-btn.active {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-            background: white;
-            padding: 2rem;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        input, select, button {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 1rem;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .customer-list {
-            margin-top: 1rem;
-        }
-
-        .customer-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem;
-            border-bottom: 1px solid #ddd;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        header { background-color: #4CAF50; color: white; text-align: center; padding: 1rem; }
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        .tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .tab-btn { padding: 0.5rem 1rem; background: #ddd; border: none; cursor: pointer; border-radius: 4px; }
+        .tab-btn.active { background: #4CAF50; color: white; }
+        .tab-content { display: none; background: white; padding: 2rem; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .tab-content.active { display: block; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; }
+        input, select, button { width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; }
+        button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        table { width: 100%; margin-top: 1rem; border-collapse: collapse; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #4CAF50; color: white; }
+        .edit-btn { background-color: #f39c12; margin: 0 0.2rem; }
+        .delete-btn { background-color: #e74c3c; }
+        .summary-box { padding: 1rem; background: #e8f5e9; border-radius: 4px; margin: 1rem 0; }
     </style>
 </head>
 <body>
@@ -128,18 +35,39 @@
 
     <div class="container">
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('purchase')">New Purchase</button>
-            <button class="tab-btn" onclick="switchTab('customers')">Customers</button>
-            <button class="tab-btn" onclick="switchTab('history')">Purchase History</button>
-            <button class="tab-btn" onclick="switchTab('summary')">Weekly Summary</button>
+            <button class="tab-btn active" onclick="switchTab('customers')">Customers</button>
+            <button class="tab-btn" onclick="switchTab('sales')">Daily Sales</button>
+            <button class="tab-btn" onclick="switchTab('expenses')">Expenses</button>
         </div>
 
-        <!-- Purchase Tab -->
-        <div id="purchase" class="tab-content active">
-            <form id="purchaseForm">
+        <!-- Customers Tab -->
+        <div id="customers" class="tab-content active">
+            <form id="customerForm">
                 <div class="form-group">
-                    <label for="customerName">Customer:</label>
-                    <select id="customerName" required></select>
+                    <label for="newCustomer">Customer Name:</label>
+                    <input type="text" id="newCustomer" required>
+                </div>
+                <button type="submit">Add Customer</button>
+            </form>
+            
+            <h3>Existing Customers</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="customerList"></tbody>
+            </table>
+        </div>
+
+        <!-- Daily Sales Tab -->
+        <div id="sales" class="tab-content">
+            <form id="salesForm">
+                <div class="form-group">
+                    <label for="salesCustomer">Customer:</label>
+                    <select id="salesCustomer" required></select>
                 </div>
                 <div class="form-group">
                     <label for="milkPrice">Price/Liter (₹):</label>
@@ -149,193 +77,227 @@
                     <label for="liters">Liters:</label>
                     <input type="number" id="liters" step="0.5" required>
                 </div>
-                <button type="submit">Add Purchase</button>
+                <button type="submit">Add Sale</button>
             </form>
+            
+            <h3>Today's Sales</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Liters</th>
+                        <th>Price/L</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="salesBody"></tbody>
+            </table>
         </div>
 
-        <!-- Customers Tab -->
-        <div id="customers" class="tab-content">
-            <div class="form-group">
-                <input type="text" id="newCustomer" placeholder="New customer name">
-                <button onclick="addCustomer()">Add Customer</button>
+        <!-- Expenses Tab -->
+        <div id="expenses" class="tab-content">
+            <form id="expenseForm">
+                <div class="form-group">
+                    <label for="expenseDate">Date:</label>
+                    <input type="date" id="expenseDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="expensePurpose">Purpose:</label>
+                    <input type="text" id="expensePurpose" required>
+                </div>
+                <div class="form-group">
+                    <label for="expenseAmount">Amount (₹):</label>
+                    <input type="number" id="expenseAmount" step="0.01" required>
+                </div>
+                <button type="submit">Add Expense</button>
+            </form>
+            
+            <div class="summary-box">
+                <h3>Expense Summary</h3>
+                <div class="form-group">
+                    <input type="date" id="summaryDate" onchange="updateExpenseSummary()">
+                </div>
+                <p>Total Expenses: ₹<span id="totalExpenses">0</span></p>
             </div>
-            <div class="customer-list" id="customerList"></div>
-        </div>
-
-        <!-- History Tab -->
-        <div id="history" class="tab-content">
-            <div class="form-group">
-                <label>Select Date:</label>
-                <input type="date" id="historyDate" onchange="updateHistory()">
-            </div>
+            
             <table>
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>Customer</th>
-                        <th>Liters</th>
+                        <th>Purpose</th>
                         <th>Amount</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="historyBody"></tbody>
-            </table>
-        </div>
-
-        <!-- Summary Tab -->
-        <div id="summary" class="tab-content">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Customer</th>
-                        <th>Weekly Total</th>
-                    </tr>
-                </thead>
-                <tbody id="summaryBody"></tbody>
+                <tbody id="expenseBody"></tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // Data Storage
-        let purchases = JSON.parse(localStorage.getItem('purchases')) || [];
-        let customers = JSON.parse(localStorage.getItem('customers')) || ['Prasad', 'Suresh', 'Satish', 'Yadav'];
+        let customers = JSON.parse(localStorage.getItem('customers')) || [];
+        let sales = JSON.parse(localStorage.getItem('sales')) || [];
+        let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        let editingCustomerId = null;
+        let editingExpenseId = null;
 
-        // Tab Management
+        // General Functions
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
-            
-            if(tabName === 'customers') updateCustomerList();
-            if(tabName === 'history') updateHistory();
-            if(tabName === 'summary') updateSummary();
+            if(tabName === 'sales') updateCustomerDropdown();
         }
 
         // Customer Management
-        function updateCustomerDropdown() {
-            const select = document.getElementById('customerName');
-            select.innerHTML = customers.map(c => `<option value="${c}">${c}</option>`).join('');
-        }
-
         function updateCustomerList() {
-            const list = document.getElementById('customerList');
-            list.innerHTML = customers.map(c => `
-                <div class="customer-item">
-                    <span>${c}</span>
-                    <div>
-                        <button onclick="editCustomer('${c}')">Edit</button>
-                        <button onclick="deleteCustomer('${c}')">Delete</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function addCustomer() {
-            const newCustomer = document.getElementById('newCustomer').value.trim();
-            if(newCustomer && !customers.includes(newCustomer)) {
-                customers.push(newCustomer);
-                localStorage.setItem('customers', JSON.stringify(customers));
-                updateCustomerDropdown();
-                updateCustomerList();
-                document.getElementById('newCustomer').value = '';
-            }
-        }
-
-        function editCustomer(oldName) {
-            const newName = prompt('Enter new name:', oldName);
-            if(newName && newName !== oldName) {
-                const index = customers.indexOf(oldName);
-                customers[index] = newName;
-                
-                // Update purchases with new name
-                purchases = purchases.map(p => 
-                    p.customerName === oldName ? {...p, customerName: newName} : p
-                );
-                
-                localStorage.setItem('customers', JSON.stringify(customers));
-                localStorage.setItem('purchases', JSON.stringify(purchases));
-                updateCustomerDropdown();
-                updateCustomerList();
-                updateHistory();
-                updateSummary();
-            }
-        }
-
-        function deleteCustomer(name) {
-            if(confirm(`Delete customer ${name}?`)) {
-                customers = customers.filter(c => c !== name);
-                purchases = purchases.filter(p => p.customerName !== name);
-                localStorage.setItem('customers', JSON.stringify(customers));
-                localStorage.setItem('purchases', JSON.stringify(purchases));
-                updateCustomerDropdown();
-                updateCustomerList();
-                updateHistory();
-                updateSummary();
-            }
-        }
-
-        // Purchase History
-        function updateHistory() {
-            const selectedDate = document.getElementById('historyDate').value;
-            const filtered = purchases.filter(p => 
-                new Date(p.date).toISOString().split('T')[0] === selectedDate
-            );
-            
-            document.getElementById('historyBody').innerHTML = filtered.map(p => `
+            const tbody = document.getElementById('customerList');
+            tbody.innerHTML = customers.map(customer => `
                 <tr>
-                    <td>${new Date(p.date).toLocaleDateString()}</td>
-                    <td>${p.customerName}</td>
-                    <td>${p.liters}L</td>
-                    <td>₹${p.amount.toFixed(2)}</td>
+                    <td>${customer.name}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editCustomer('${customer.id}')">Edit</button>
+                        <button class="delete-btn" onclick="deleteCustomer('${customer.id}')">Delete</button>
+                    </td>
                 </tr>
             `).join('');
+            localStorage.setItem('customers', JSON.stringify(customers));
+            updateCustomerDropdown();
         }
 
-        // Weekly Summary
-        function updateSummary() {
-            const summary = {};
-            const oneWeekAgo = new Date();
-            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-
-            purchases.forEach(p => {
-                if(new Date(p.date) > oneWeekAgo) {
-                    summary[p.customerName] = (summary[p.customerName] || 0) + p.amount;
-                }
-            });
-
-            document.getElementById('summaryBody').innerHTML = Object.entries(summary).map(([name, total]) => `
-                <tr>
-                    <td>${name}</td>
-                    <td>₹${total.toFixed(2)}</td>
-                </tr>
-            `).join('');
+        function updateCustomerDropdown() {
+            const select = document.getElementById('salesCustomer');
+            select.innerHTML = customers.map(c => 
+                `<option value="${c.id}">${c.name}</option>`
+            ).join('');
         }
 
-        // Purchase Form
-        document.getElementById('purchaseForm').addEventListener('submit', e => {
+        document.getElementById('customerForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const purchase = {
-                date: new Date(),
-                customerName: document.getElementById('customerName').value,
-                liters: parseFloat(document.getElementById('liters').value),
-                amount: parseFloat(document.getElementById('liters').value) * 
-                        parseFloat(document.getElementById('milkPrice').value)
+            const newCustomer = {
+                id: Date.now().toString(),
+                name: document.getElementById('newCustomer').value.trim()
             };
-
-            purchases.push(purchase);
-            localStorage.setItem('purchases', JSON.stringify(purchases));
-            updateHistory();
-            updateSummary();
-            e.target.reset();
+            
+            if(editingCustomerId) {
+                const index = customers.findIndex(c => c.id === editingCustomerId);
+                customers[index] = newCustomer;
+                editingCustomerId = null;
+            } else {
+                customers.push(newCustomer);
+            }
+            
+            this.reset();
+            updateCustomerList();
         });
 
-        // Initial Setup
-        updateCustomerDropdown();
+        function editCustomer(id) {
+            const customer = customers.find(c => c.id === id);
+            document.getElementById('newCustomer').value = customer.name;
+            editingCustomerId = id;
+        }
+
+        function deleteCustomer(id) {
+            customers = customers.filter(c => c.id !== id);
+            updateCustomerList();
+        }
+
+        // Sales Management
+        document.getElementById('salesForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const sale = {
+                id: Date.now().toString(),
+                date: new Date().toISOString(),
+                customerId: document.getElementById('salesCustomer').value,
+                price: parseFloat(document.getElementById('milkPrice').value),
+                liters: parseFloat(document.getElementById('liters').value),
+                amount: parseFloat(document.getElementById('milkPrice').value) * 
+                        parseFloat(document.getElementById('liters').value)
+            };
+            
+            sales.push(sale);
+            localStorage.setItem('sales', JSON.stringify(sales));
+            this.reset();
+            updateSalesDisplay();
+        });
+
+        function updateSalesDisplay() {
+            const tbody = document.getElementById('salesBody');
+            tbody.innerHTML = sales.map(sale => {
+                const customer = customers.find(c => c.id === sale.customerId);
+                return `
+                    <tr>
+                        <td>${customer?.name || 'Deleted Customer'}</td>
+                        <td>${sale.liters.toFixed(2)}</td>
+                        <td>₹${sale.price.toFixed(2)}</td>
+                        <td>₹${sale.amount.toFixed(2)}</td>
+                        <td>
+                            <button class="delete-btn" onclick="deleteSale('${sale.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function deleteSale(id) {
+            sales = sales.filter(s => s.id !== id);
+            localStorage.setItem('sales', JSON.stringify(sales));
+            updateSalesDisplay();
+        }
+
+        // Expense Management
+        document.getElementById('expenseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const expense = {
+                id: Date.now().toString(),
+                date: document.getElementById('expenseDate').value,
+                purpose: document.getElementById('expensePurpose').value,
+                amount: parseFloat(document.getElementById('expenseAmount').value)
+            };
+            
+            expenses.push(expense);
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+            this.reset();
+            updateExpenseDisplay();
+            updateExpenseSummary();
+        });
+
+        function updateExpenseDisplay() {
+            const tbody = document.getElementById('expenseBody');
+            tbody.innerHTML = expenses.map(expense => `
+                <tr>
+                    <td>${new Date(expense.date).toLocaleDateString()}</td>
+                    <td>${expense.purpose}</td>
+                    <td>₹${expense.amount.toFixed(2)}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteExpense('${expense.id}')">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateExpenseSummary() {
+            const selectedDate = document.getElementById('summaryDate').value;
+            const total = expenses
+                .filter(e => e.date === selectedDate)
+                .reduce((sum, e) => sum + e.amount, 0);
+            
+            document.getElementById('totalExpenses').textContent = total.toFixed(2);
+        }
+
+        function deleteExpense(id) {
+            expenses = expenses.filter(e => e.id !== id);
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+            updateExpenseDisplay();
+            updateExpenseSummary();
+        }
+
+        // Initial Load
         updateCustomerList();
-        updateHistory();
-        updateSummary();
+        updateSalesDisplay();
+        updateExpenseDisplay();
     </script>
 </body>
 </html>
