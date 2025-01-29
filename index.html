@@ -3,54 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chintu Dairy Farm Management</title>
+    <title>Dairy Farm Management System</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
-        header { background-color: #4CAF50; color: white; text-align: center; padding: 1rem; }
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-        .tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
-        .tab-btn { padding: 0.5rem 1rem; background: #ddd; border: none; cursor: pointer; border-radius: 4px; }
+        body { font-family: Arial, sans-serif; background: #f0f0f0; }
+        header { background: #4CAF50; color: white; padding: 1rem; text-align: center; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .tab-btn { padding: 0.8rem 1.5rem; background: #ddd; border: none; cursor: pointer; border-radius: 4px; }
         .tab-btn.active { background: #4CAF50; color: white; }
-        .tab-content { display: none; background: white; padding: 2rem; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .tab-content { display: none; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
         .tab-content.active { display: block; }
         .form-group { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: 0.5rem; }
-        input, select, button { width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; }
-        button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #45a049; }
-        table { width: 100%; margin-top: 1rem; border-collapse: collapse; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #4CAF50; color: white; }
-        .edit-btn { background-color: #f39c12; margin: 0 0.2rem; }
-        .delete-btn { background-color: #e74c3c; }
-        .summary-box { padding: 1rem; background: #e8f5e9; border-radius: 4px; margin: 1rem 0; }
+        input, select, button { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #4CAF50; color: white; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #45a049; }
+        table { width: 100%; margin-top: 1rem; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #4CAF50; color: white; }
+        .actions { display: flex; gap: 0.5rem; }
+        .edit-btn { background: #FFC107; }
+        .delete-btn { background: #dc3545; }
+        .summary-box { background: #e8f5e9; padding: 1rem; border-radius: 6px; margin: 1rem 0; }
     </style>
 </head>
 <body>
     <header>
-        <h1>Chintu Dairy Farm</h1>
-        <p>Fresh Milk Daily</p>
+        <h1>Chintu Dairy Farm Management</h1>
+        <p>Complete Farm Management Solution</p>
     </header>
 
     <div class="container">
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('customers')">Customers</button>
-            <button class="tab-btn" onclick="switchTab('sales')">Daily Sales</button>
+            <button class="tab-btn" onclick="switchTab('sales')">Sales</button>
             <button class="tab-btn" onclick="switchTab('expenses')">Expenses</button>
+            <button class="tab-btn" onclick="switchTab('reports')">Reports</button>
         </div>
 
         <!-- Customers Tab -->
         <div id="customers" class="tab-content active">
             <form id="customerForm">
                 <div class="form-group">
-                    <label for="newCustomer">Customer Name:</label>
-                    <input type="text" id="newCustomer" required>
+                    <label>Customer Name:</label>
+                    <input type="text" id="customerName" required>
                 </div>
-                <button type="submit">Add Customer</button>
+                <button type="submit">Save Customer</button>
             </form>
-            
-            <h3>Existing Customers</h3>
+
             <table>
                 <thead>
                     <tr>
@@ -62,36 +62,35 @@
             </table>
         </div>
 
-        <!-- Daily Sales Tab -->
+        <!-- Sales Tab -->
         <div id="sales" class="tab-content">
             <form id="salesForm">
                 <div class="form-group">
-                    <label for="salesCustomer">Customer:</label>
+                    <label>Customer:</label>
                     <select id="salesCustomer" required></select>
                 </div>
                 <div class="form-group">
-                    <label for="milkPrice">Price/Liter (₹):</label>
+                    <label>Price per Liter (₹):</label>
                     <input type="number" id="milkPrice" step="0.01" required>
                 </div>
                 <div class="form-group">
-                    <label for="liters">Liters:</label>
-                    <input type="number" id="liters" step="0.5" required>
+                    <label>Liters Sold:</label>
+                    <input type="number" id="liters" step="0.1" required>
                 </div>
-                <button type="submit">Add Sale</button>
+                <button type="submit">Save Sale</button>
             </form>
-            
-            <h3>Today's Sales</h3>
+
             <table>
                 <thead>
                     <tr>
+                        <th>Date</th>
                         <th>Customer</th>
                         <th>Liters</th>
-                        <th>Price/L</th>
                         <th>Amount</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="salesBody"></tbody>
+                <tbody id="salesList"></tbody>
             </table>
         </div>
 
@@ -99,28 +98,25 @@
         <div id="expenses" class="tab-content">
             <form id="expenseForm">
                 <div class="form-group">
-                    <label for="expenseDate">Date:</label>
+                    <label>Expense Date:</label>
                     <input type="date" id="expenseDate" required>
                 </div>
                 <div class="form-group">
-                    <label for="expensePurpose">Purpose:</label>
+                    <label>Purpose:</label>
                     <input type="text" id="expensePurpose" required>
                 </div>
                 <div class="form-group">
-                    <label for="expenseAmount">Amount (₹):</label>
+                    <label>Amount (₹):</label>
                     <input type="number" id="expenseAmount" step="0.01" required>
                 </div>
-                <button type="submit">Add Expense</button>
+                <button type="submit">Save Expense</button>
             </form>
-            
+
             <div class="summary-box">
                 <h3>Expense Summary</h3>
-                <div class="form-group">
-                    <input type="date" id="summaryDate" onchange="updateExpenseSummary()">
-                </div>
-                <p>Total Expenses: ₹<span id="totalExpenses">0</span></p>
+                <p>Total Expenses: ₹<span id="totalExpenses">0.00</span></p>
             </div>
-            
+
             <table>
                 <thead>
                     <tr>
@@ -130,7 +126,28 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="expenseBody"></tbody>
+                <tbody id="expensesList"></tbody>
+            </table>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports" class="tab-content">
+            <div class="summary-box">
+                <h3>Weekly Sales Report</h3>
+                <p>Total Milk Sold: <span id="weeklyLiters">0.0</span> liters</p>
+                <p>Total Sales: ₹<span id="weeklySales">0.00</span></p>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Total Liters</th>
+                        <th>Total Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="weeklyReport"></tbody>
             </table>
         </div>
     </div>
@@ -139,16 +156,17 @@
         let customers = JSON.parse(localStorage.getItem('customers')) || [];
         let sales = JSON.parse(localStorage.getItem('sales')) || [];
         let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-        let editingCustomerId = null;
-        let editingExpenseId = null;
+        let editingId = null;
 
-        // General Functions
-        function switchTab(tabName) {
+        // Tab Management
+        function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
-            if(tabName === 'sales') updateCustomerDropdown();
+            if(tabId === 'sales') updateCustomerDropdown();
+            if(tabId === 'reports') updateWeeklyReport();
+            if(tabId === 'expenses') updateExpenseSummary();
         }
 
         // Customer Management
@@ -157,7 +175,7 @@
             tbody.innerHTML = customers.map(customer => `
                 <tr>
                     <td>${customer.name}</td>
-                    <td>
+                    <td class="actions">
                         <button class="edit-btn" onclick="editCustomer('${customer.id}')">Edit</button>
                         <button class="delete-btn" onclick="deleteCustomer('${customer.id}')">Delete</button>
                     </td>
@@ -176,27 +194,27 @@
 
         document.getElementById('customerForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const newCustomer = {
-                id: Date.now().toString(),
-                name: document.getElementById('newCustomer').value.trim()
+            const customer = {
+                id: editingId || Date.now().toString(),
+                name: document.getElementById('customerName').value.trim()
             };
-            
-            if(editingCustomerId) {
-                const index = customers.findIndex(c => c.id === editingCustomerId);
-                customers[index] = newCustomer;
-                editingCustomerId = null;
+
+            if(editingId) {
+                const index = customers.findIndex(c => c.id === editingId);
+                customers[index] = customer;
+                editingId = null;
             } else {
-                customers.push(newCustomer);
+                customers.push(customer);
             }
-            
+
             this.reset();
             updateCustomerList();
         });
 
         function editCustomer(id) {
             const customer = customers.find(c => c.id === id);
-            document.getElementById('newCustomer').value = customer.name;
-            editingCustomerId = id;
+            document.getElementById('customerName').value = customer.name;
+            editingId = id;
         }
 
         function deleteCustomer(id) {
@@ -208,32 +226,41 @@
         document.getElementById('salesForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const sale = {
-                id: Date.now().toString(),
-                date: new Date().toISOString(),
+                id: editingId || Date.now().toString(),
+                date: new Date().toISOString().split('T')[0],
                 customerId: document.getElementById('salesCustomer').value,
                 price: parseFloat(document.getElementById('milkPrice').value),
                 liters: parseFloat(document.getElementById('liters').value),
                 amount: parseFloat(document.getElementById('milkPrice').value) * 
                         parseFloat(document.getElementById('liters').value)
             };
-            
-            sales.push(sale);
+
+            if(editingId) {
+                const index = sales.findIndex(s => s.id === editingId);
+                sales[index] = sale;
+                editingId = null;
+            } else {
+                sales.push(sale);
+            }
+
             localStorage.setItem('sales', JSON.stringify(sales));
             this.reset();
             updateSalesDisplay();
+            updateWeeklyReport();
         });
 
         function updateSalesDisplay() {
-            const tbody = document.getElementById('salesBody');
+            const tbody = document.getElementById('salesList');
             tbody.innerHTML = sales.map(sale => {
                 const customer = customers.find(c => c.id === sale.customerId);
                 return `
                     <tr>
+                        <td>${sale.date}</td>
                         <td>${customer?.name || 'Deleted Customer'}</td>
-                        <td>${sale.liters.toFixed(2)}</td>
-                        <td>₹${sale.price.toFixed(2)}</td>
+                        <td>${sale.liters.toFixed(1)}</td>
                         <td>₹${sale.amount.toFixed(2)}</td>
-                        <td>
+                        <td class="actions">
+                            <button class="edit-btn" onclick="editSale('${sale.id}')">Edit</button>
                             <button class="delete-btn" onclick="deleteSale('${sale.id}')">Delete</button>
                         </td>
                     </tr>
@@ -241,23 +268,39 @@
             }).join('');
         }
 
+        function editSale(id) {
+            const sale = sales.find(s => s.id === id);
+            document.getElementById('salesCustomer').value = sale.customerId;
+            document.getElementById('milkPrice').value = sale.price;
+            document.getElementById('liters').value = sale.liters;
+            editingId = id;
+        }
+
         function deleteSale(id) {
             sales = sales.filter(s => s.id !== id);
             localStorage.setItem('sales', JSON.stringify(sales));
             updateSalesDisplay();
+            updateWeeklyReport();
         }
 
         // Expense Management
         document.getElementById('expenseForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const expense = {
-                id: Date.now().toString(),
+                id: editingId || Date.now().toString(),
                 date: document.getElementById('expenseDate').value,
                 purpose: document.getElementById('expensePurpose').value,
                 amount: parseFloat(document.getElementById('expenseAmount').value)
             };
-            
-            expenses.push(expense);
+
+            if(editingId) {
+                const index = expenses.findIndex(e => e.id === editingId);
+                expenses[index] = expense;
+                editingId = null;
+            } else {
+                expenses.push(expense);
+            }
+
             localStorage.setItem('expenses', JSON.stringify(expenses));
             this.reset();
             updateExpenseDisplay();
@@ -265,26 +308,26 @@
         });
 
         function updateExpenseDisplay() {
-            const tbody = document.getElementById('expenseBody');
+            const tbody = document.getElementById('expensesList');
             tbody.innerHTML = expenses.map(expense => `
                 <tr>
-                    <td>${new Date(expense.date).toLocaleDateString()}</td>
+                    <td>${expense.date}</td>
                     <td>${expense.purpose}</td>
                     <td>₹${expense.amount.toFixed(2)}</td>
-                    <td>
+                    <td class="actions">
+                        <button class="edit-btn" onclick="editExpense('${expense.id}')">Edit</button>
                         <button class="delete-btn" onclick="deleteExpense('${expense.id}')">Delete</button>
                     </td>
                 </tr>
             `).join('');
         }
 
-        function updateExpenseSummary() {
-            const selectedDate = document.getElementById('summaryDate').value;
-            const total = expenses
-                .filter(e => e.date === selectedDate)
-                .reduce((sum, e) => sum + e.amount, 0);
-            
-            document.getElementById('totalExpenses').textContent = total.toFixed(2);
+        function editExpense(id) {
+            const expense = expenses.find(e => e.id === id);
+            document.getElementById('expenseDate').value = expense.date;
+            document.getElementById('expensePurpose').value = expense.purpose;
+            document.getElementById('expenseAmount').value = expense.amount;
+            editingId = id;
         }
 
         function deleteExpense(id) {
@@ -294,10 +337,58 @@
             updateExpenseSummary();
         }
 
+        function updateExpenseSummary() {
+            const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+            document.getElementById('totalExpenses').textContent = total.toFixed(2);
+        }
+
+        // Weekly Report
+        function updateWeeklyReport() {
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            
+            const weeklySales = sales.filter(s => 
+                new Date(s.date) > oneWeekAgo
+            );
+
+            const customerMap = new Map();
+            weeklySales.forEach(sale => {
+                const customer = customers.find(c => c.id === sale.customerId);
+                const customerName = customer?.name || 'Deleted Customer';
+                
+                if(!customerMap.has(customerName)) {
+                    customerMap.set(customerName, { liters: 0, amount: 0 });
+                }
+                
+                const data = customerMap.get(customerName);
+                data.liters += sale.liters;
+                data.amount += sale.amount;
+            });
+
+            const tbody = document.getElementById('weeklyReport');
+            tbody.innerHTML = Array.from(customerMap).map(([name, data]) => `
+                <tr>
+                    <td>${name}</td>
+                    <td>${data.liters.toFixed(1)}</td>
+                    <td>₹${data.amount.toFixed(2)}</td>
+                    <td class="actions">
+                        <button class="edit-btn" onclick="editWeeklyCustomer('${name}')">Edit</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            const totalLiters = weeklySales.reduce((sum, s) => sum + s.liters, 0);
+            const totalSales = weeklySales.reduce((sum, s) => sum + s.amount, 0);
+            document.getElementById('weeklyLiters').textContent = totalLiters.toFixed(1);
+            document.getElementById('weeklySales').textContent = totalSales.toFixed(2);
+        }
+
         // Initial Load
         updateCustomerList();
         updateSalesDisplay();
         updateExpenseDisplay();
+        updateExpenseSummary();
+        updateWeeklyReport();
     </script>
 </body>
 </html>
