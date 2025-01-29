@@ -10,21 +10,37 @@
         header { background: #4CAF50; color: white; padding: 1rem; text-align: center; }
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
         .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
-        .tab-btn { padding: 0.8rem 1.5rem; background: #ddd; border: none; cursor: pointer; border-radius: 4px; }
+        .tab-btn { padding: 0.8rem 1.5rem; background: #ddd; border: none; cursor: pointer; border-radius: 4px; transition: 0.3s; }
         .tab-btn.active { background: #4CAF50; color: white; }
-        .tab-content { display: none; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        .tab-content { display: none; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); animation: fadeIn 0.5s; }
         .tab-content.active { display: block; }
-        .form-group { margin-bottom: 1rem; }
-        input, select, button { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; }
-        button { background: #4CAF50; color: white; cursor: pointer; transition: 0.3s; }
+        .form-group { margin-bottom: 1rem; animation: slideIn 0.5s; }
+        input, select, button { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; transition: 0.3s; }
+        button { background: #4CAF50; color: white; cursor: pointer; }
         button:hover { background: #45a049; }
-        table { width: 100%; margin-top: 1rem; border-collapse: collapse; }
+        table { width: 100%; margin-top: 1rem; border-collapse: collapse; animation: fadeIn 0.5s; }
         th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
         th { background: #4CAF50; color: white; }
         .actions { display: flex; gap: 0.5rem; }
         .edit-btn { background: #FFC107; }
         .delete-btn { background: #dc3545; }
-        .summary-box { background: #e8f5e9; padding: 1rem; border-radius: 6px; margin: 1rem 0; }
+        .summary-box { background: #e8f5e9; padding: 1rem; border-radius: 6px; margin: 1rem 0; animation: slideIn 0.5s; }
+        .date-filter { margin-bottom: 1rem; }
+        .date-filter input { width: auto; margin-right: 0.5rem; }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
     </style>
 </head>
 <body>
@@ -80,6 +96,11 @@
                 <button type="submit">Save Sale</button>
             </form>
 
+            <div class="date-filter">
+                <label>Filter by Date:</label>
+                <input type="date" id="salesDateFilter" onchange="updateSalesDisplay()">
+            </div>
+
             <table>
                 <thead>
                     <tr>
@@ -111,6 +132,11 @@
                 </div>
                 <button type="submit">Save Expense</button>
             </form>
+
+            <div class="date-filter">
+                <label>Filter by Date:</label>
+                <input type="date" id="expensesDateFilter" onchange="updateExpenseDisplay()">
+            </div>
 
             <div class="summary-box">
                 <h3>Expense Summary</h3>
@@ -160,7 +186,10 @@
 
         // Tab Management
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+                tab.style.animation = 'fadeIn 0.5s';
+            });
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
@@ -227,7 +256,7 @@
             e.preventDefault();
             const sale = {
                 id: editingId || Date.now().toString(),
-                date: new Date().toISOString().split('T')[0],
+                date: document.getElementById('salesDateFilter').value || new Date().toISOString().split('T')[0],
                 customerId: document.getElementById('salesCustomer').value,
                 price: parseFloat(document.getElementById('milkPrice').value),
                 liters: parseFloat(document.getElementById('liters').value),
@@ -250,8 +279,13 @@
         });
 
         function updateSalesDisplay() {
+            const selectedDate = document.getElementById('salesDateFilter').value;
+            const filteredSales = selectedDate ? 
+                sales.filter(s => s.date === selectedDate) : 
+                sales;
+
             const tbody = document.getElementById('salesList');
-            tbody.innerHTML = sales.map(sale => {
+            tbody.innerHTML = filteredSales.map(sale => {
                 const customer = customers.find(c => c.id === sale.customerId);
                 return `
                     <tr>
@@ -308,8 +342,13 @@
         });
 
         function updateExpenseDisplay() {
+            const selectedDate = document.getElementById('expensesDateFilter').value;
+            const filteredExpenses = selectedDate ? 
+                expenses.filter(e => e.date === selectedDate) : 
+                expenses;
+
             const tbody = document.getElementById('expensesList');
-            tbody.innerHTML = expenses.map(expense => `
+            tbody.innerHTML = filteredExpenses.map(expense => `
                 <tr>
                     <td>${expense.date}</td>
                     <td>${expense.purpose}</td>
